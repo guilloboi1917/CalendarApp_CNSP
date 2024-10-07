@@ -26,11 +26,27 @@ const CONNECTION_URL = "mongodb://localhost:27017/test";//process.env.CONNECTION
 
 const PORT = process.env.PORT || 5000;
 
+// Function to drop the database
+async function resetDatabase() {
+  try {
+    // Drop the database
+    await mongoose.connection.dropDatabase();
+    console.log("Database has been cleared.");
+  } catch (err) {
+    console.error("Failed to reset the database:", err);
+  }
+}
+
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() =>
+  .then(async () => {
+
+    //clear database before use
+    // await resetDatabase();
+
+    // start
     app.listen(PORT, () =>
       console.log(`Server Running on Port: ${PORT}`)
     )
-  )
+  })
   .catch((error) => console.log(`${error} did not connect`));

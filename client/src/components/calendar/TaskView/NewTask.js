@@ -55,7 +55,7 @@ export default function NewTask(props){
             value={taskData.description} 
             onChange={(e) => setTaskData({...taskData, description: e.target.value})} 
           />
-          <TextField 
+          {/* <TextField 
             fullWidth={true} 
             autoComplete="off" 
             id="task-shared" 
@@ -64,7 +64,7 @@ export default function NewTask(props){
             variant="filled" 
             value={taskData.shared} 
             onChange={(e) => setTaskData({...taskData, shared: e.target.value})} 
-          />
+          /> */}
         </Box>
         <DialogActions>
           <Button onClick={handleSubmit}>

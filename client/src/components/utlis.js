@@ -1,5 +1,5 @@
 export const WEEKDATE = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-export const MONTH = ["Janurary", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export const MONTH = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export function getMonth(month){
   return MONTH[month];

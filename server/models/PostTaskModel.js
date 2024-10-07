@@ -10,6 +10,7 @@ const PostTaskSchema = mongoose.Schema({
     month: { type: Number },
     year: { type: Number }, 
   },
+  sharedWith: [String] // list of other user's emails
 })
 
 const PostTask = mongoose.model("PostTask", PostTaskSchema);

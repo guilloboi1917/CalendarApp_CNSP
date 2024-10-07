@@ -3,7 +3,7 @@ import React from "react";
 import Checkbox from '@mui/material/Checkbox';
 
 import { useSelector, useDispatch } from "react-redux";
-import { updateTask, deleteTask, shareTask } from "../../../redux/actions/TaskActions";
+import { updateTask, deleteTask } from "../../../redux/actions/TaskActions";
 import { getMonth } from "../../utlis";
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -56,7 +56,7 @@ export default function Menu(){
                 <IconButton size="large" edge="start" aria-label="menu" sx={{ mr: 1, color: "#5f6368" }} onClick={() => dispatch(deleteTask(task._id))}>
                   <DeleteIcon id={task._id}/>
                 </IconButton>
-                <IconButton size="large" edge="start" aria-label="menu" sx={{ mr: 1, color: "#5f6368" }} onClick={() => dispatch(shareTask(task._id))}>
+                <IconButton size="large" edge="start" aria-label="menu" sx={{ mr: 1, color: "#5f6368" }} onClick={() => console.log("shared")}>
                   <ShareIcon id={task._id}/>
                 </IconButton>
               </Box>
