@@ -1,0 +1,37 @@
+services:
+  # MongoDB service
+  mongo:
+    image: mongo
+    container_name: mongodb
+    # restart: always
+    ports:
+      - "27017:27017"    # Expose MongoDB on the default port
+    # environment:
+    #   - MONGO_INITDB_DATABASE: my_db
+    #   - MONGO_INITDB_ROOT_USERNAME: root
+    #   - MONGO_INITDB_ROOT_PASSWORD: example
+
+  # Node.js server service
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile_server
+    container_name: node-app-server
+    ports:
+      - "80:80"
+      - "443:443"
+    # environment:
+    #   MONGO_URI: "mongodb://root:example@mongo:27017/calendarDb"
+    depends_on:
+      - mongo
+
+  # Node.js client service
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    container_name: node-app-client
+    ports:
+      - "3000:3000"
+    depends_on:
+     - server

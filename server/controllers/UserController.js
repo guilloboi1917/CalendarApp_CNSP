@@ -40,7 +40,6 @@ export const signup = async (req, res) => {
 
     const result = await User.create({ email, password: hashPassword, name: `${firstName} ${lastName}`});
 
-    console.log(process.env.AUTH)
     const token = jwt.sign({ email: result.email, id: result._id }, process.env.AUTH, { expiresIn: "1h"});
 
     res.status(200).json({ result, token })

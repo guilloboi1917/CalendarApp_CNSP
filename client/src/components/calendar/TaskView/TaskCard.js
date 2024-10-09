@@ -14,12 +14,6 @@ import Toolbar from '@mui/material/Toolbar';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ShareIcon from '@mui/icons-material/Share';
-
-
 
 export default function TaskCard(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("profile")));

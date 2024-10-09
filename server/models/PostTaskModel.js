@@ -9,6 +9,7 @@ const PostTaskSchema = mongoose.Schema({
     day: { type: Number },
     month: { type: Number },
     year: { type: Number }, 
+    // TIME ?
   },
   sharedWith: [String] // list of other user's emails
 })
