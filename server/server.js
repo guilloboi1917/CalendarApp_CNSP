@@ -7,6 +7,12 @@ import fs from "fs";
 import http from "http";
 import https from "https";
 
+// Defense
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import easyWaf from "easy-waf";
+import mongoSanitize from "express-mongo-sanitize";
+
 import PostTaskRoutes from "./routes/PostTaskRoute.js";
 import UserRoute from "./routes/UserRoute.js";
 
@@ -29,12 +35,47 @@ app.get("/", (req, res) => {
   res.send("hello to crud calendar api")
 })
 
+// Rate limiting with express-rate-limit (basic usage for common paths)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// Rate limiting
+app.use(limiter);
+
+// Use Helmet to secure HTTP headers
+app.use(helmet());
+
+// mongo input sanitizing
+app.use(mongoSanitize());
+
+// Basic WAF with easy-waf
+app.use(
+  easyWaf({
+      allowedHTTPMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+      modules: {
+          directoryTraversal: {
+              enabled: true,
+              excludePaths: /^\/exclude$/i,
+          },
+          sqlInjection: {
+            enabled: true
+          },
+          xss : {
+            enabled: true
+          }
+      },
+  }),
+);
+
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 
-const PORT = process.env.PORT || 3001; // Apparently we need port 80/443
+const PORT = process.env.PORT;
 
 console.log(`connecting to: ${CONNECTION_URL}`)
 
