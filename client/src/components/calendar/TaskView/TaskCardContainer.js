@@ -12,7 +12,7 @@ export default function TaskCardContainer(props){
   const showTasks = () => {
     if (props.tasks.length === 0){
       return (
-        <Typography sx={{width: 1, height: "100%"}}>No Tasks today</Typography>
+        <Typography sx={{width: 1, height: "100%"}}>No Tasks found</Typography>
       )
     }else{
       return (

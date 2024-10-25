@@ -19,4 +19,4 @@ RUN npm run build
 # Command to start the backend server
 CMD ["npm", "start"]
 
-EXPOSE 3001
+EXPOSE 3000

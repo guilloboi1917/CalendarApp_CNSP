@@ -65,7 +65,7 @@ mongoose
     httpServer.listen(80, () =>
       console.log(`HTTP Server Running on Port: 80`));
 
-    httpServer.listen(443, () => {
+    httpsServer.listen(443, () => {
       console.log(`HTTPS Server Running on Port: 443`);
     });
   })
