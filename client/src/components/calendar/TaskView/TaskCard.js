@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 export default function TaskCard(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("profile")));
   const [taskData, setTaskData] = useState({
-    creator: user.result._id,
+    creator: props.task._id,//user.result._id,
     title: props.task.title,
     description: props.task.description,
     complete: props.task.complete,
@@ -39,7 +39,7 @@ export default function TaskCard(props) {
     setShowFull(false);
     setShowEdit(false);
     setTaskData({
-      creator: user.result._id,
+      creator: props.task._id,//user.result._id,
       title: props.task.title,
       description: props.task.description,
       complete: props.task.complete,
@@ -52,7 +52,7 @@ export default function TaskCard(props) {
     if (showEdit) {
       setShowEdit(false);
       setTaskData({
-        creator: user.result._id,
+        creator: props.task._id,//user.result._id,
         title: props.task.title,
         description: props.task.description,
         complete: props.task.complete,
@@ -68,7 +68,7 @@ export default function TaskCard(props) {
     if (taskData.complete) {
       dispatch(updateTask(props.task._id, { ...taskData, complete: false }));
       setTaskData({
-        creator: user.result._id,
+        creator: props.task._id,//user.result._id,
         title: props.task.title,
         description: props.task.description,
         complete: false,
@@ -79,7 +79,7 @@ export default function TaskCard(props) {
     else {
       dispatch(updateTask(props.task._id, { ...taskData, complete: true }));
       setTaskData({
-        creator: user.result._id,
+        creator: props.task._id,//user.result._id,
         title: props.task.title,
         description: props.task.description,
         complete: true,
@@ -138,13 +138,13 @@ export default function TaskCard(props) {
                 <TextField size="small" autoComplete="off" id="task-description" label="Description" multiline rows={2} variant="standard" value={taskData.description} onChange={(e) => setTaskData({ ...taskData, description: e.target.value })} sx={{ mt: 1, mb: 1, flexGrow: 1 }} />
               }
             </Toolbar>
-            <Toolbar>
+            {/* <Toolbar>
               {!showEdit ?
                 <Typography component="div" noWrap={false} sx={{ flexGrow: 1, color: "black" }}> {taskData.sharedWith.join(',')}</Typography> 
                 :
                 <TextField size="small" autoComplete="off" id="task-sharedWith" label="Shared With (use comma to separate emails)" multiline rows={2} variant="standard" value={taskData.sharedWith} onChange={(e) => setTaskData({ ...taskData, sharedWith: e.target.value.split(',') })} sx={{ mt: 1, mb: 1, flexGrow: 1 }} />
               }
-            </Toolbar>
+            </Toolbar> */}
 
             {showEdit ? <Button onClick={handleUpdateSave}> Save</Button> : ""}
           </AppBar>

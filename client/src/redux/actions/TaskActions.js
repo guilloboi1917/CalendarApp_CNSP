@@ -55,11 +55,29 @@ export const deleteTask = (id) => async (dispatch) => {
   }
 }
 
-export const shareTask = (id, task) => async (dispatch) => {
+export const shareTask = (id, email) => async (dispatch) => {
+
   const userId = JSON.parse(localStorage.getItem("profile")).result._id;
 
   try {
-    const { data } = await api.shareTask(userId, id, task);
+    const { data } = await api.shareTask(userId, id, email);
+
+    console.log(data)
+
+    dispatch({ type: types.UPDATE_TASK, payload: data });
+  }
+  catch (error) { console.log(error.message) }
+
+}
+
+export const unshareTask = (id, email) => async (dispatch) => {
+
+  const userId = JSON.parse(localStorage.getItem("profile")).result._id;
+
+  try {
+    const { data } = await api.unshareTask(userId, id, email);
+
+    console.log(data)
 
     dispatch({ type: types.UPDATE_TASK, payload: data });
   }

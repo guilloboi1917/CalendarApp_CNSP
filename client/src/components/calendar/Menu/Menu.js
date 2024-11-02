@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 
 import { useSelector, useDispatch } from "react-redux";
-import { updateTask, deleteTask } from "../../../redux/actions/TaskActions";
+import { updateTask, deleteTask, shareTask, unshareTask } from "../../../redux/actions/TaskActions";
 import { getMonth } from "../../utlis";
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { List, ListItem, ListItemText } from "@mui/material";
 
 export default function Menu() {
   const date = useSelector(state => state.date);
@@ -37,9 +38,20 @@ export default function Menu() {
     setCurrentTaskId(null);
   };
 
-  const handleShare = () => {
-    console.log(`Task ${currentTaskId} shared with email: ${email}`);
+  // To share task with email
+  const handleShare = (remove) => {
+    console.log(`Sharing Task ${currentTaskId} with email: ${email}`);
+    const emailData = { "email": email }
+    dispatch(shareTask(currentTaskId, emailData))
     handleCloseModal();
+  };
+
+  
+  // To share task with email
+  const handleUnshare = (e) => {
+    console.log(`Unsharing Task ${currentTaskId} with email: ${e}`);
+    const emailData = { "email": e }
+    dispatch(unshareTask(currentTaskId, emailData))
   };
 
   const getMonthTask = () => {
@@ -91,14 +103,6 @@ export default function Menu() {
     )
   }
 
-  // return(
-  //   <Box gridColumn="span 3" sx={{borderBottom: "#dadce0 1px solid"}}>
-  //     {monthTask.length > 0 ? 
-  //       showAllTask() : 
-  //       <Typography variant="h5" sx={{marginLeft: 1, textAlign:"left", color: "black"}}>No tasks this month</Typography>}
-  //   </Box>
-  // )
-
   return (
     <Box gridColumn="span 3" sx={{ borderBottom: "#dadce0 1px solid" }}>
       {monthTask.length > 0 ? showAllTask() : (
@@ -116,6 +120,23 @@ export default function Menu() {
           <Typography id="share-task-modal" variant="h6" component="h2">
             Share Task
           </Typography>
+          <List dense={true}>
+            {currentTaskId ? tasks.find(task => task._id === currentTaskId)["sharedWith"].map((e) =>
+            (
+              <ListItem
+                secondaryAction={
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleUnshare(e)}>
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText
+                  primary= {e}
+                />
+              </ListItem>
+            ),)
+              : ""}
+          </List>
           <TextField
             fullWidth
             label="Email Address"

@@ -18,7 +18,7 @@ export const getUserTasks = async (req, res) => {
         userEmail
     })
 
-    console.log(`sharedTasks: ${sharedTasks}`)
+    // console.log(`sharedTasks: ${sharedTasks}`)
 
     res.status(200).json([...tasks, ...sharedTasks]);
 
@@ -47,10 +47,11 @@ export const createTasks = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   const { taskId: _id } = req.params;
+  const { userId: _userId } = req.params
 
   const task = req.body
 
-  console.log(task)
+  if (_userId !== task["creator"]) return res.status(403).send("Not creator!")
 
   if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No task with that id");
 
@@ -68,4 +69,63 @@ export const deleteTask = async (req, res) => {
   const deleteTask = await PostTask.findByIdAndRemove(_id);
 
   res.json({ message: "Task deleted sucessfully" });
+}
+
+export const shareTask = async (req, res) => {
+  const { taskId: _id } = req.params;
+  const { userId: _userId } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No task with that id");
+
+  const task = await PostTask.findById(_id).exec()
+
+  if (_userId !== task["creator"]) return res.status(403).send("Not creator!")
+
+  const { email: sharedEmail } = req.body
+
+  const user = await UserModel.findOne({ email: sharedEmail }).exec();
+
+  if (!user) return res.status(404).send("No user with that email found");
+  if (task["sharedWith"].indexOf(sharedEmail) !== -1)
+    return res.status(200).send("Email already shared")
+
+  const updatedTask = await PostTask.findByIdAndUpdate(
+    _id,
+    { $push: { sharedWith: sharedEmail } },
+    { new: true },
+    (err) => {
+      if (err) return res.status(404).send("Sharing failed");
+    }
+  ).clone().exec()
+
+
+
+  res.status(201).json(updatedTask)
+
+}
+
+export const unshareTask = async (req, res) => {
+  const { taskId: _id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No task with that id");
+
+  const task = await PostTask.findById(_id).exec()
+
+  const { email: sharedEmail } = req.body
+
+  console.log(task["sharedWith"])
+  if (task["sharedWith"].indexOf(sharedEmail) === -1)
+    return res.status(200).send("Email already not shared")
+
+  const updatedTask = await PostTask.findByIdAndUpdate(
+    _id,
+    { $pull: { sharedWith: sharedEmail } },
+    { new: true },
+    (err) => {
+      if (err) return res.status(404).send("Unsharing failed");
+    }
+  ).clone().exec()
+
+  res.status(201).json(updatedTask)
+
 }
