@@ -54,6 +54,19 @@ export default function Menu() {
     dispatch(unshareTask(currentTaskId, emailData))
   };
 
+  //handle email validation
+  const [value, setValue] = useState("");
+  const [valid, setValid] = useState(false);const handleValidation = (e) => {
+      //set value to user input
+      setValue(e.target.value);
+      
+      //define regex     
+      const reg = /(?:[a-z0–9!#$%&’*+/=?^_`{|}~-]+(?:\.[a-z0–9!#$%&’*+/=?^_`{|}~-]+)*|”(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*”)@(?:(?:[a-z0–9](?:[a-z0–9-]*[a-z0–9])?\.)+[a-z0–9](?:[a-z0–9-]*[a-z0–9])?|\[(?:(?:(2(5[0–5]|[0–4][0–9])|1[0–9][0–9]|[1–9]?[0–9]))\.){3}(?:(2(5[0–5]|[0–4][0–9])|1[0–9][0–9]|[1–9]?[0–9])|[a-z0–9-]*[a-z0–9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+      
+      //test whether input is valid
+      setValid(reg.test(e.target.value));
+  };
+  
   const getMonthTask = () => {
     let task = tasks.filter(task => task.date.month === date.month && task.date.year === date.year);
     task.sort((a, b) => a.date.day - b.date.day);
@@ -142,8 +155,17 @@ export default function Menu() {
             label="Email Address"
             variant="outlined"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            //onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              //check email format
+              handleValidation(e);
+              }
+            }
+            error={!valid}
             sx={{ mt: 2, mb: 2 }}
+            type="email"
+            placeholder="email to share with"
           />
           <Button variant="contained" color="primary" onClick={handleShare}>
             Share
