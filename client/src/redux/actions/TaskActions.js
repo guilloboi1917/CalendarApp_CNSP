@@ -55,6 +55,7 @@ export const deleteTask = (id) => async (dispatch) => {
   }
 }
 
+//New shareTask to throw error back to handleShare
 export const shareTask = (id, email) => async (dispatch) => {
 
   const userId = JSON.parse(localStorage.getItem("profile")).result._id;
@@ -66,9 +67,20 @@ export const shareTask = (id, email) => async (dispatch) => {
 
     dispatch({ type: types.UPDATE_TASK, payload: data });
   }
-  catch (error) { console.log(error.message) }
-
-}
+  catch (error) {
+    console.error("Error in shareTask:", error);
+    // Manually throw the error to be caught by handleShare
+    // Attach the response status if available, otherwise throw a generic error
+    if (error.response) {
+      throw {
+        status: error.response.status,
+        message: error.response.data.message || "Unknown error occurred"
+      };
+    } else {
+      throw new Error ("Failed to share task due to an unexpected error");
+    }
+  }
+};
 
 export const unshareTask = (id, email) => async (dispatch) => {
 

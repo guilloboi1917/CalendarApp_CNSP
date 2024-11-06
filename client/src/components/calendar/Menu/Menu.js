@@ -38,16 +38,28 @@ export default function Menu() {
     setCurrentTaskId(null);
   };
 
-  // To share task with email
-  const handleShare = (remove) => {
+  // New handleshare that catches 404 email not found and generates warning
+  const handleShare = async () =>{
     console.log(`Sharing Task ${currentTaskId} with email: ${email}`);
     const emailData = { "email": email }
-    dispatch(shareTask(currentTaskId, emailData))
-    handleCloseModal();
+
+    try{
+      // Await dispatch to catch any errors it might throw
+      await dispatch(shareTask(currentTaskId,emailData));
+      handleCloseModal(); //close modal if successful
+    } catch (error) {
+      //check if error is 404
+      if (error.status === 404) {
+        alert('This email address does not exits. Please enter a valid user email.');
+      } else {
+        //handle any other errors
+        console.error("An error occured:", error);
+        alert('An unexpected error occured. Please try again');
+      }
+    }
   };
 
-  
-  // To share task with email
+  // To unshare task with email
   const handleUnshare = (e) => {
     console.log(`Unsharing Task ${currentTaskId} with email: ${e}`);
     const emailData = { "email": e }
