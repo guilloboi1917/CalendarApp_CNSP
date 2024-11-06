@@ -57,6 +57,7 @@ export default function Menu() {
   //handle email validation
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);const handleValidation = (e) => {
+
       //set value to user input
       setValue(e.target.value);
       
@@ -167,7 +168,7 @@ export default function Menu() {
             type="email"
             placeholder="email to share with"
           />
-          <Button variant="contained" color="primary" onClick={handleShare}>
+          <Button variant="contained" color="primary" onClick={handleShare} disabled={!valid}>
             Share
           </Button>
         </Box>
