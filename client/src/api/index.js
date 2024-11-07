@@ -18,5 +18,7 @@ export const deleteTask = (userId, taskId) => API.delete(`/tasks/${userId}/${tas
 export const shareTask = (userId, taskId, sharedEmail) => API.patch(`/tasks/${userId}/${taskId}/share`, sharedEmail)
 export const unshareTask = (userId, taskId, sharedEmail) => API.patch(`/tasks/${userId}/${taskId}/unshare`, sharedEmail)
 
+export const updateUser = (userId, updatedUserData) => API.patch(`/users/update/${userId}`, updatedUserData)
+
 export const signIn = (formData) => API.post("/users/signin", formData);
 export const signUp = (formData) => API.post("/users/signup", formData);

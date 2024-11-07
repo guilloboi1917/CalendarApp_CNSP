@@ -13,7 +13,7 @@ export default function CalendarCell(props) {
   return (
     <Box container>
       <Box gridColumn="span 1" display="flex" flexDirection="column" height="15vh" maxHeight="15vh" sx={{ borderLeft: "#dadce0 1px solid" }} onClick={handleOpen}>
-        <Typography sx={props.today ? { color: "#00bfff", textShadow: "0 0 1px #00bfff, 0 0 1px black" } : {}}>
+        <Typography sx={props.today ? { color: "#000fff", border: 1, textShadow: "0 0 1px #00bfff, 0 0 1px black" } : {}}>
           {props.day.day}
         </Typography>
         <Box sx={{ p: 0.5, overflowY: "auto" }}>

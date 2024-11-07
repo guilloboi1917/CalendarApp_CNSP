@@ -54,7 +54,7 @@ app.use(mongoSanitize());
 // Basic WAF with easy-waf
 app.use(
   easyWaf({
-      allowedHTTPMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHTTPMethods: ['GET', 'POST', 'PATCH', 'DELETE'],
       modules: {
           directoryTraversal: {
               enabled: true,
