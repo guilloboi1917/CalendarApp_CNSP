@@ -10,6 +10,8 @@ export default function CalendarCell(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // console.log(props.dayTasks.sort((t1, t2) => parseInt(t1.date.startTime) -parseInt(t2.date.startTime)))
+
   return (
     <Box container>
       <Box gridColumn="span 1" display="flex" flexDirection="column" height="15vh" maxHeight="15vh" sx={{ borderLeft: "#dadce0 1px solid" }} onClick={handleOpen}>
@@ -18,7 +20,7 @@ export default function CalendarCell(props) {
         </Typography>
         <Box sx={{ p: 0.5, overflowY: "auto" }}>
           {props.dayTasks &&
-            props.dayTasks.map((t) => (
+            props.dayTasks.sort((t1, t2) => t1.date.startTime > t2.date.startTime).map((t) => (
               <Box component="section" sx={{ p: 0, marginTop: 1, background: 'lightblue' }}>
                 {t.title}
               </Box>
