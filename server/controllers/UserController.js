@@ -16,6 +16,8 @@ export const signin = async (req, res) => {
 
     const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
 
+    console.log(existingUser.password)
+
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invaild credentials" });
 
     const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.AUTH, { expiresIn: "1h" });
@@ -75,7 +77,7 @@ export const updateUser = async (req, res) => {
       result = await User.findByIdAndUpdate(_userId, { email: email, password: hashPassword, name: `${firstName} ${lastName}` });
     }
     else // dont update password field
-      result = await User.findByIdAndUpdate(_userId, { email: email, name: `${firstName} ${lastName}` });
+      result = await User.findByIdAndUpdate(_userId, { email: email, name: `${firstName} ${lastName}` },{ new: true });
 
     // create new token
     const token = jwt.sign({ email: result.email, id: result._id }, process.env.AUTH, { expiresIn: "1h" });
