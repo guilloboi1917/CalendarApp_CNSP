@@ -84,20 +84,36 @@ export const shareTask = async (req, res) => {
   const { email: sharedEmail } = req.body
 
   const user = await UserModel.findOne({ email: sharedEmail }).exec();
+  const taskCreator = await UserModel.findById(_userId)
 
   if (!user) return res.status(404).send("No user with that email found");
   if (task["sharedWith"].indexOf(sharedEmail) !== -1)
     return res.status(200).send("Email already shared")
 
-  const updatedTask = await PostTask.findByIdAndUpdate(
+  const updatedTask = PostTask.findByIdAndUpdate(
     _id,
     { $push: { sharedWith: sharedEmail } },
     { new: true },
     (err) => {
       if (err) return res.status(404).send("Sharing failed");
     }
-  ).clone().exec()
+  )
 
+  const updatedUser = UserModel.findByIdAndUpdate(user._id,
+    {
+      $push: {
+        sharedNotifications: {
+          read: false,
+          who: taskCreator.email,
+          content: `${taskCreator.email} shared task ${task.title} with you!`
+        }
+      }
+    },
+    { new: true },
+    (err) => {
+      if (err) return res.status(404).send("Notification creation failed");
+    }
+  )
 
 
   res.status(201).json(updatedTask)

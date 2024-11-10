@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import BasicMenu from './NavbarMenu';
+import NotificationDropdown from './NotificationDropdown';
 
 
 // (menuIcon) CRUD Calendar    Current Month  < > Profile Menu (Logout Icon)
@@ -36,7 +37,7 @@ export default function NavBar(props) {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, background: "lightblue"}}>
+    <Box sx={{ flexGrow: 1, background: "lightblue" }}>
       <AppBar position="static" style={{ background: "transparent", boxShadow: "none" }}>
         <Toolbar>
           <IconButton size="large" edge="start" aria-label="menu" sx={{ mr: 2, color: "#5f6368" }} onClick={() => dispatch(menuClick(calendar))}>
@@ -57,6 +58,7 @@ export default function NavBar(props) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 0, mr: 2, color: "#5f6368" }}>
             {`${user.result.name}`}
           </Typography>
+          <NotificationDropdown user = {user.result} notifications = { user.result.sharedNotifications ? user.result.sharedNotifications : [] }>Notifications</NotificationDropdown>
           <BasicMenu
             logout={() => logout()}
             handleAccountClick={() => handleAccountClick()}
