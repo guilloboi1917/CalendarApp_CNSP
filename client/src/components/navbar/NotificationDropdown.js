@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Button, Menu, MenuItem, ListItemText } from '@mui/material';
 import { Notifications } from '@mui/icons-material';
-import Typography from '@mui/material';
 import { updateUser } from '../../redux/actions/UserActions';
 import { useDispatch } from "react-redux";
 
@@ -19,13 +18,24 @@ const NotificationDropdown = ({ user, notifications }) => {
   // Close the Menu
   const handleClose = () => {
     // Set all notifications to read
-    notifications.map((n) => n.read = true)
-    user.sharedNotifications = notifications
-    dispatch(updateUser(user))
+    // notifications.map((n) => n.read = true)
+    // user.sharedNotifications = notifications
+    // dispatch(updateUser(user))
     setAnchorEl(null);
   };
 
-  const nothingNew = notifications.length === 0
+  const nothingNew = notifications?.length === 0
+
+  // notifications = [
+  //   { "read": false, "who": "testemail", "content": "OldesttestContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "testContent" },
+  //   { "read": true, "who": "testemail", "content": "noah.isaak@hotmail.com has shared task Weihnachten with you!" },
+  //   { "read": true, "who": "testemail", "content": "NewesttestContent" }]
 
   return (
     <div>
@@ -51,17 +61,17 @@ const NotificationDropdown = ({ user, notifications }) => {
         }}
         sx={{
           maxHeight: 320,  // Set a max height for the scrollable area
-          overflowY: 'auto', // Enable vertical scroll if content overflows
+          overflowY: 'hidden', // Enable vertical scroll if content overflows,
         }}
       >
         {/* Map over notifications and render MenuItems */}
-        {!nothingNew && notifications?.slice(0, 5).map((notification, index) => (
-          <MenuItem key={index} onClick={handleClose} sx={{ backgroundColor: notification.read ? "lightgrey" : "white" }}>
-            <ListItemText primary={notification.content} />
+        {notifications?.reverse().slice(0,5).map((notification, index) => (
+          <MenuItem key={index} onClick={handleClose} sx={{maxWidth: "700px", borderBottom: "1px solid black", backgroundColor: notification.read ? "white" : "white" }}>
+            <ListItemText primary={notification.content}/>
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </div >
   );
 };
 

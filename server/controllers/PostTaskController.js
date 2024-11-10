@@ -90,16 +90,13 @@ export const shareTask = async (req, res) => {
   if (task["sharedWith"].indexOf(sharedEmail) !== -1)
     return res.status(200).send("Email already shared")
 
-  const updatedTask = PostTask.findByIdAndUpdate(
+  const updatedTask = await PostTask.findByIdAndUpdate(
     _id,
     { $push: { sharedWith: sharedEmail } },
-    { new: true },
-    (err) => {
-      if (err) return res.status(404).send("Sharing failed");
-    }
+    { new: true }
   )
 
-  const updatedUser = UserModel.findByIdAndUpdate(user._id,
+  const updatedUser = await UserModel.findByIdAndUpdate(user._id,
     {
       $push: {
         sharedNotifications: {
@@ -109,10 +106,7 @@ export const shareTask = async (req, res) => {
         }
       }
     },
-    { new: true },
-    (err) => {
-      if (err) return res.status(404).send("Notification creation failed");
-    }
+    { new: true }
   )
 
 
@@ -133,14 +127,14 @@ export const unshareTask = async (req, res) => {
   if (task["sharedWith"].indexOf(sharedEmail) === -1)
     return res.status(200).send("Email already not shared")
 
-  const updatedTask = await PostTask.findByIdAndUpdate(
+  const updatedTask = PostTask.findByIdAndUpdate(
     _id,
     { $pull: { sharedWith: sharedEmail } },
     { new: true },
     (err) => {
       if (err) return res.status(404).send("Unsharing failed");
     }
-  ).clone().exec()
+  )
 
   res.status(201).json(updatedTask)
 

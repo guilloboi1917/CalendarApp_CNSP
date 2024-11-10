@@ -74,7 +74,7 @@ export const updateUser = async (req, res) => {
     if (password) {
       // if we provided a new password
       const hashPassword = await bcrypt.hash(password, 12);
-      result = await User.findByIdAndUpdate(_userId, { email: email, password: hashPassword, name: `${firstName} ${lastName}` });
+      result = await User.findByIdAndUpdate(_userId, { email: email, password: hashPassword, name: `${firstName} ${lastName}` },{ new: true });
     }
     else // dont update password field
       result = await User.findByIdAndUpdate(_userId, { email: email, name: `${firstName} ${lastName}` },{ new: true });
