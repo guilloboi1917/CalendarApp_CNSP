@@ -18,9 +18,9 @@ import UserRoute from "./routes/UserRoute.js";
 
 dotenv.config();
 
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf-8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf-8');
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync('sslcert/server.key', 'utf-8');
+// const certificate = fs.readFileSync('sslcert/server.crt', 'utf-8');
+// const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
 
@@ -71,7 +71,7 @@ app.use(
 );
 
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+// var httpsServer = https.createServer(credentials, app);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 
@@ -103,11 +103,11 @@ mongoose
     // app.listen(PORT, () =>
     //   console.log(`Server Running on Port: ${PORT}`)
     // )
-    httpServer.listen(80, () =>
-      console.log(`HTTP Server Running on Port: 80`));
+    httpServer.listen(PORT, () =>
+      console.log(`HTTP Server Running on Port: ${PORT}`));
 
-    httpsServer.listen(443, () => {
-      console.log(`HTTPS Server Running on Port: 443`);
-    });
+    // httpsServer.listen(443, () => {
+    //   console.log(`HTTPS Server Running on Port: 443`);
+    // });
   })
   .catch((error) => console.log(`${error} did not connect`));

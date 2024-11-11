@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "HTTPS=true nodemon server.js"
   },
   "author": "Jackie Luu",
   "license": "ISC",

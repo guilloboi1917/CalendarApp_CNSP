@@ -1,5 +1,5 @@
 # Second stage: Build the server (backend)
-FROM node:20 AS build-server
+FROM node:20 AS server-build
 
 # Set working directory for server
 WORKDIR /app/server
@@ -11,10 +11,10 @@ COPY ./server/package*.json ./
 RUN npm install
 
 # Copy all server source files
-COPY ./server ./
+COPY ./server .
 
 # Expose port for the server
-EXPOSE 80 443
+EXPOSE 3000
 
 # Command to start the backend server
 CMD ["npm", "start"]
