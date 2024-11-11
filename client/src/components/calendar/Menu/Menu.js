@@ -137,7 +137,7 @@ export default function Menu() {
     <Box gridColumn="span 3" sx={{ borderBottom: "#dadce0 1px solid" }}>
       {monthTask.length > 0 ? showAllTask() : (
         <Typography variant="h5" sx={{ marginLeft: 1, textAlign: "left", color: "black" }}>
-          No tasks this month
+          No events this month
         </Typography>
       )}
 
@@ -148,7 +148,7 @@ export default function Menu() {
           width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,
         }}>
           <Typography id="share-task-modal" variant="h6" component="h2">
-            Share Task
+            Share event
           </Typography>
           <List dense={true}>
             {currentTaskId ? tasks.find(task => task._id === currentTaskId)["sharedWith"].map((e) =>
