@@ -71,7 +71,6 @@ app.use(
 );
 
 var httpServer = http.createServer(app);
-// var httpsServer = https.createServer(credentials, app);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 
@@ -96,18 +95,7 @@ mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(async () => {
 
-    //clear database before use
-    // await resetDatabase();
-
-    // start
-    // app.listen(PORT, () =>
-    //   console.log(`Server Running on Port: ${PORT}`)
-    // )
     httpServer.listen(PORT, () =>
       console.log(`HTTP Server Running on Port: ${PORT}`));
-
-    // httpsServer.listen(443, () => {
-    //   console.log(`HTTPS Server Running on Port: 443`);
-    // });
   })
   .catch((error) => console.log(`${error} did not connect`));
