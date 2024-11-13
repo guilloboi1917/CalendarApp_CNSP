@@ -14,15 +14,21 @@ import Toolbar from '@mui/material/Toolbar';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import TimeRangePicker from "../../TimeRangePicker";
+import ColorPicker from "../../ColorPicker";
 
-export default function TaskCard(props){
+export default function TaskCard(props) {
   const [user] = useState(JSON.parse(localStorage.getItem("profile")));
   const [taskData, setTaskData] = useState({
-    creator: user.result._id,
-    title:props.task.title,
+    creator: props.task.creator,//user.result._id,
+    title: props.task.title,
     description: props.task.description,
+    color: props.task.color,
+    startTime: props.task.startTime,
+    endTime: props.task.endTime,
     complete: props.task.complete,
-    date: props.task.date
+    date: props.task.date,
+    sharedWith: props.task.sharedWith //!#
   });
 
   const [showFull, setShowFull] = useState(false);
@@ -38,54 +44,73 @@ export default function TaskCard(props){
     setShowFull(false);
     setShowEdit(false);
     setTaskData({
-      creator: user.result._id,
-      title:props.task.title,
+      creator: props.task.creator,//user.result._id,
+      title: props.task.title,
       description: props.task.description,
+      color: props.task.color,
+      startTime: props.task.startTime,
+      endTime: props.task.endTime,
       complete: props.task.complete,
-      date: props.task.date
+      date: props.task.date,
+      sharedWith: props.task.sharedWith
     })
   }
 
   const handleEditOpen = () => {
-    if (showEdit){
+    if (showEdit) {
       setShowEdit(false);
       setTaskData({
-        creator: user.result._id,
-        title:props.task.title,
+        creator: props.task.creator,//user.result._id,
+        title: props.task.title,
         description: props.task.description,
+        color: props.task.color,
+        startTime: props.task.startTime,
+        endTime: props.task.endTime,
         complete: props.task.complete,
-        date: props.task.date
+        date: props.task.date,
+        sharedWith: props.task.sharedWith
       })
-    }else{
+    } else {
       setShowEdit(true);
     }
   }
 
   const handleComplete = () => {
-    if (taskData.complete){
-      dispatch(updateTask(props.task._id, {...taskData, complete: false}));
+    if (taskData.complete) {
+      dispatch(updateTask(props.task._id, { ...taskData, complete: false }));
       setTaskData({
-        creator: user.result._id,
-        title:props.task.title,
+        creator: props.task.creator,//user.result._id,
+        title: props.task.title,
         description: props.task.description,
+        color: props.task.color,
+        startTime: props.task.startTime,
+        endTime: props.task.endTime,
         complete: false,
-        date: props.task.date
+        date: props.task.date,
+        sharedWith: props.task.sharedWith
       })
     }
-    else{
-      dispatch(updateTask(props.task._id, {...taskData, complete: true}));
+    else {
+      dispatch(updateTask(props.task._id, { ...taskData, complete: true }));
       setTaskData({
-        creator: user.result._id,
-        title:props.task.title,
+        creator: props.task.creator,//user.result._id,
+        title: props.task.title,
         description: props.task.description,
+        color: props.task.color,
+        startTime: props.task.startTime,
+        endTime: props.task.endTime,
         complete: true,
-        date: props.task.date
+        date: props.task.date,
+        sharedWith: props.task.sharedWith
       })
     }
   }
 
   const handleUpdateSave = () => {
-    if (props.task.title !== taskData.title || props.task.description !== taskData.description){
+    // if (props.task.title !== taskData.title || props.task.description !== taskData.description || props.task.sharedWith !== taskData.sharedWith) {
+    //   dispatch(updateTask(props.task._id, taskData));
+    // }
+    if (props.task !== taskData) {
       dispatch(updateTask(props.task._id, taskData));
     }
     setShowFull(false);
@@ -97,25 +122,48 @@ export default function TaskCard(props){
     setShowFull(false);
     setShowEdit(false);
   }
-  
-  return(
-    <Box sx={{marginBottom: 1 }}>
-      { !showFull ?
-        <Box display="flex" flexDirection="row"> 
-          <Checkbox checked={taskData.complete} onChange={handleComplete}/>
-          <Button fullWidth variant="contained" sx={{justifyContent: "flex-start" }} onClick={handleOpen}>
+
+  const handleStartTimeChange = (newStartTime) => {
+    setTaskData((prev) => ({
+      ...prev,
+      date: { ...prev.date, startTime: newStartTime },
+    }));
+  };
+
+  const handleEndTimeChange = (newEndTime) => {
+    setTaskData((prev) => ({
+      ...prev,
+      date: { ...prev.date, endTime: newEndTime },
+    }));
+  };
+
+  return (
+    <Box sx={{ marginBottom: 1, marginTop: 1 }}>
+      {!showFull ?
+        <Box display="flex" flexDirection="row">
+          {/* <Checkbox checked={taskData.complete} onChange={handleComplete} /> */}
+          <Button fullWidth variant="contained" sx={{
+            justifyContent: "flex-start",
+            backgroundColor: taskData.color ? taskData.color : "lightblue",
+            "&:hover": {
+              backgroundColor: taskData.color ? taskData.color : "lightblue", // Keep the color same on hover
+              transform: "translateY(-2px)",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+            },
+            transition: "transform 0.2s ease, box-shadow 0.2s ease", // Smooth transition
+          }} onClick={handleOpen}>
             <Typography> {taskData.title}</Typography>
           </Button>
         </Box>
-         :
+        :
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="relative" style={{ background: "transparent", boxShadow: "none"}}>
+          <AppBar position="relative" style={{ background: "transparent", boxShadow: "none" }}>
             <Toolbar variant="dense">
-              {!showEdit ? 
-                <Typography variant="h5" component="div" sx={{ flexGrow: 1, color: "black"}}>
+              {!showEdit ?
+                <Typography variant="h5" component="div" sx={{ flexGrow: 1, color: "black" }}>
                   {taskData.title}
                 </Typography> :
-                <TextField size="large" autoComplete="off" id="task-title" label="Title" variant="standard" value={taskData.title} onChange={(e) => setTaskData({...taskData, title: e.target.value})} sx={{flexGrow: 1}}/>
+                <TextField size="large" autoComplete="off" id="task-title" label="Title" variant="standard" value={taskData.title} onChange={(e) => setTaskData({ ...taskData, title: e.target.value })} sx={{ flexGrow: 1 }} />
               }
               <IconButton size="small" edge="start" aria-label="menu" sx={{ mr: 1, color: "#5f6368" }} onClick={handleEditOpen}>
                 <EditIcon />
@@ -128,15 +176,29 @@ export default function TaskCard(props){
               </IconButton>
             </Toolbar>
             <Toolbar>
-              {!showEdit ? 
-              <Typography component="div" noWrap={false} sx={{ flexGrow: 1, color: "black"}}> {taskData.description}</Typography>:
-              <TextField size="small" autoComplete="off" id="task-description" label="Description" multiline rows={2} variant="standard" value={taskData.description} onChange={(e) => setTaskData({...taskData, description: e.target.value})} sx={{mt: 1, mb: 1, flexGrow: 1}}/>
+              {!showEdit ?
+                <Typography component="div" noWrap={false} sx={{ flexGrow: 1, color: "black" }}> {taskData.description}</Typography> :
+                <Box>< TextField size="large" fullWidth= {true} autoComplete="off" id="task-description" label="Description" multiline rows={2} variant="standard" value={taskData.description} onChange={(e) => setTaskData({ ...taskData, description: e.target.value })} sx={{ mt: 1, mb: 1, flexGrow: 1 }} />
+                  <TimeRangePicker sx={{ mt: 2 }}
+                    initialStartTime={new Date(taskData.date.year, taskData.date.month - 1, taskData.date.day, Math.floor(taskData.date.startTime / 100), taskData.date.startTime % 100)}
+                    initialEndTime={new Date(taskData.date.year, taskData.date.month - 1, taskData.date.day, Math.floor(taskData.date.endTime / 100), taskData.date.endTime % 100)}
+                    onStartTimeChange={handleStartTimeChange} onEndTimeChange={handleEndTimeChange} />
+                  <Typography sx={{ color: "black", mt: 2, mb: 2 }}>Event Color</Typography>
+                  <ColorPicker
+                    sx={{ m: 2 }}
+                    selectedColor={taskData.color}
+                    onColorSelect={(color) => setTaskData({ ...taskData, color })}
+                  />
+                </Box>
               }
-            </Toolbar>   
+            </Toolbar>
+
+
+
             {showEdit ? <Button onClick={handleUpdateSave}> Save</Button> : ""}
-          </AppBar> 
+          </AppBar>
         </Box>
-    }
+      }
     </Box>
   )
 }

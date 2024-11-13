@@ -4,7 +4,6 @@ import { signup } from "../../redux/actions/AuthActions";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Copyright from "../copyright/Copyright";
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,9 +19,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const initialState = {
   firstName: "",
-  lastName:"",
+  lastName: "",
   email: "",
-  password:"",
+  password: "",
 }
 
 const theme = createTheme();
@@ -32,13 +31,34 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Email validation regex
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [emailError, setEmailError] = useState(false); // For email validation
+  const [emailHelperText, setEmailHelperText] = useState(""); // To display error message
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(signup(formData, navigate));
+    // Only submit if email is valid
+    if (!emailError) {
+      dispatch(signup(formData, navigate));
+    }
   };
 
   const handleChange = (event) => {
-    setFormData({ ...formData,  [event.target.name]:event.target.value })
+    const { name, value } = event.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    // Validate email
+    if (name === "email") {
+      if (!emailRegex.test(value)) {
+        setEmailError(true);
+        setEmailHelperText("Please enter a valid email address.");
+      } else {
+        setEmailError(false);
+        setEmailHelperText("");
+      }
+    }
   }
 
   return (
@@ -68,7 +88,8 @@ export default function SignUp() {
                 <TextField required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="off" onChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
-                <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="off" onChange={handleChange} />
+                <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="off" error={emailError}
+                  helperText={emailHelperText} onChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="off" onChange={handleChange} />
@@ -86,7 +107,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );

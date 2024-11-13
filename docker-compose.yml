@@ -1,0 +1,55 @@
+services:
+  # MongoDB service
+  mongo:
+    image: mongo
+    container_name: mongo
+    # restart: always
+    # ports:
+    #   - "27017:27017" # Expose MongoDB on the default port
+    volumes:
+      - mongodb:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: calendarDb
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: supersecretpassword
+    networks:
+      - dockernet
+    command: mongod --auth
+
+  # Node.js server service
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile_server
+    container_name: node-app-server
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://root:supersecretpassword@mongo:27017/calendarDb?authSource=admin
+      AUTH: t1Jt4buEdbZk6S7sxXpw4rySPrIcNCUlOhcvoHak2Uc9TSl8LhGhP1BUxmaVrVj
+      PORT: 3000
+    depends_on:
+      - mongo
+    networks:
+      - dockernet
+
+  # Node.js client service
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    image: nginx
+    container_name: node-app-client
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - server
+    networks:
+      - dockernet
+
+networks:
+  dockernet:
+    driver: bridge
+volumes:
+  mongodb: {}

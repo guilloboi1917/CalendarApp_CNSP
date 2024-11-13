@@ -11,6 +11,7 @@ export const signin = (formData, navigate) => async (dispatch) => {
     navigate("/home");
 
   }catch(error){
+    alert("Signin failed")
     console.log(error);
   }
 }
