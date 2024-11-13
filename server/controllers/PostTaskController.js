@@ -126,10 +126,7 @@ export const unshareTask = async (req, res) => {
   const updatedTask = PostTask.findByIdAndUpdate(
     _id,
     { $pull: { sharedWith: sharedEmail } },
-    { new: true },
-    (err) => {
-      if (err) return res.status(404).send("Unsharing failed");
-    }
+    { new: true }
   )
 
   res.status(201).json(updatedTask)
