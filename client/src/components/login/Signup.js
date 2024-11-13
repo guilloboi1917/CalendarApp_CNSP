@@ -4,7 +4,6 @@ import { signup } from "../../redux/actions/AuthActions";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Copyright from "../copyright/Copyright";
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -108,7 +107,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>
     </ThemeProvider>
   );

@@ -1,13 +1,18 @@
-﻿# Crud Calendar
+﻿# CNSP Calendar
 
-This project is a full stack MERN Calendar Applicaiton that Allows you to Create, Read, Update, and Delete Events 
+The CNSP Calendar App is a simple client-server web application based on a MERN-stack (MongoDB, Express, React \& Node.js).
 
-## Project Details
+## Project Details and Setup
 
 This project was bootstrapped with React + Express + MongoBD.
 
-## Preview
+The application can simply be run with docker after running:
 
-![Login](static/crudcalendar-login.png)
-![Signup](static/crudcalendar-signup.png)
-![Main](static/crudcalendar-main.png)
+_docker-compose up --build_
+
+in the application root directory.
+When the containers are running, the client can be access through http://localhost:80 and https://localhost:443.
+The frontend is served via http and https with nginx.
+The backend is exposed via port 3000.
+Mongodb uses port 27017.
+In total, three containers will be created, one for the frontend, backend and the mongodb database.

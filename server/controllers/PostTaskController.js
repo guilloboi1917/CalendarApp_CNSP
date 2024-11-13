@@ -18,8 +18,6 @@ export const getUserTasks = async (req, res) => {
         userEmail
     })
 
-    // console.log(`sharedTasks: ${sharedTasks}`)
-
     res.status(200).json([...tasks, ...sharedTasks]);
 
   } catch (error) {
@@ -30,8 +28,6 @@ export const getUserTasks = async (req, res) => {
 
 export const createTasks = async (req, res) => {
   const task = req.body;
-
-  // if (!req.userId) return res.json({ message: "Unauthenticated"});
 
   const newTask = new PostTask(task);
 

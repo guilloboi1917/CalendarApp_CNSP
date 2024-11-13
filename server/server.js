@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 // Rate limiting with express-rate-limit (basic usage for common paths)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
+  max: 200, // Limit each IP to 100 requests per window
   message: 'Too many requests from this IP, please try again later.'
 });
 
@@ -59,9 +59,6 @@ app.use(
           directoryTraversal: {
               enabled: true,
               excludePaths: /^\/exclude$/i,
-          },
-          sqlInjection: {
-            enabled: true
           },
           xss : {
             enabled: true
