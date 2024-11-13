@@ -62,6 +62,9 @@ app.use(
           },
           xss : {
             enabled: true
+          },
+          noSqlInjection: {
+            enabled: true
           }
       },
   }),
