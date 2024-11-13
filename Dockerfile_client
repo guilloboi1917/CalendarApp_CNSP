@@ -1,6 +1,9 @@
 # First stage: Build the client (frontend)
 FROM node:20 AS client-build
 
+# Add a unprivileged user
+RUN groupadd -r cnsp_user && useradd -r -g cnsp_user cnsp_user
+
 # Set working directory for client
 WORKDIR /app/client
 
@@ -34,3 +37,6 @@ EXPOSE 80 443
 
 # Containers run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+# Activate User
+USER cnsp_user

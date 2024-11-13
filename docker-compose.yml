@@ -10,11 +10,11 @@ services:
       - mongodb:/data/db
     environment:
       MONGO_INITDB_DATABASE: calendarDb
-      # MONGO_INITDB_ROOT_USERNAME: root
-      # MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: supersecretpassword
     networks:
       - dockernet
-    command: mongod
+    command: mongod --auth
 
   # Node.js server service
   server:
@@ -25,7 +25,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      MONGO_URI: mongodb://mongo:27017/calendarDb
+      MONGO_URI: mongodb://root:supersecretpassword@mongo:27017/calendarDb
       AUTH: t1Jt4buEdbZk6S7sxXpw4rySPrIcNCUlOhcvoHak2Uc9TSl8LhGhP1BUxmaVrVj
       PORT: 3000
     depends_on:

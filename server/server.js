@@ -76,7 +76,7 @@ const CONNECTION_URL = process.env.MONGO_URI;
 
 const PORT = process.env.PORT;
 
-console.log(`connecting to: ${CONNECTION_URL}`)
+// console.log(`connecting to: ${CONNECTION_URL}`)
 
 // Function to drop the database
 async function resetDatabase() {
