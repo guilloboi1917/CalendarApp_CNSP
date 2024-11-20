@@ -58,7 +58,7 @@ export default function TaskForm(props){
         </AppBar>
       </DialogTitle>
       <DialogContent>
-        <Box sx={{ width: '100%', typography: 'body1' }}>
+        <Box sx={{ width: '100%', typography: 'body1', height: 500}}>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="Task Form tabs">

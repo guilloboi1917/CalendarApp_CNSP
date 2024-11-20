@@ -34,8 +34,6 @@ export const signup = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
 
-    console.log(existingUser)
-
     if (existingUser) return res.status(404).json({ message: "Email already exist" });
 
     const hashPassword = await bcrypt.hash(password, 12);
@@ -53,6 +51,7 @@ export const signup = async (req, res) => {
 
 
 }
+
 export const updateUser = async (req, res) => {
   const { email, password, firstName, lastName } = req.body; // refers to new data
   const { userId: _userId } = req.params
@@ -73,10 +72,10 @@ export const updateUser = async (req, res) => {
     if (password) {
       // if we provided a new password
       const hashPassword = await bcrypt.hash(password, 12);
-      result = await User.findByIdAndUpdate(_userId, { email: email, password: hashPassword, name: `${firstName} ${lastName}` });
+      result = await User.findByIdAndUpdate(_userId, { email: email, password: hashPassword, name: `${firstName} ${lastName}` },{ new: true });
     }
     else // dont update password field
-      result = await User.findByIdAndUpdate(_userId, { email: email, name: `${firstName} ${lastName}` });
+      result = await User.findByIdAndUpdate(_userId, { email: email, name: `${firstName} ${lastName}` },{ new: true });
 
     // create new token
     const token = jwt.sign({ email: result.email, id: result._id }, process.env.AUTH, { expiresIn: "1h" });

@@ -18,9 +18,9 @@ import UserRoute from "./routes/UserRoute.js";
 
 dotenv.config();
 
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf-8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf-8');
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync('sslcert/server.key', 'utf-8');
+// const certificate = fs.readFileSync('sslcert/server.crt', 'utf-8');
+// const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
 
@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 // Rate limiting with express-rate-limit (basic usage for common paths)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
+  max: 200, // Limit each IP to 100 requests per window
   message: 'Too many requests from this IP, please try again later.'
 });
 
@@ -57,10 +57,10 @@ app.use(
               enabled: true,
               excludePaths: /^\/exclude$/i,
           },
-          sqlInjection: {
+          xss : {
             enabled: true
           },
-          xss : {
+          noSqlInjection: {
             enabled: true
           }
       },
@@ -72,13 +72,12 @@ app.use("/tasks", PostTaskRoutes);
 app.use("/users", UserRoute);
 
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
 
 const CONNECTION_URL = process.env.MONGO_URI;
 
 const PORT = process.env.PORT;
 
-console.log(`connecting to: ${CONNECTION_URL}`)
+// console.log(`connecting to: ${CONNECTION_URL}`)
 
 // Function to drop the database
 async function resetDatabase() {
@@ -97,18 +96,7 @@ mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(async () => {
 
-    //clear database before use
-    // await resetDatabase();
-
-    // start
-    // app.listen(PORT, () =>
-    //   console.log(`Server Running on Port: ${PORT}`)
-    // )
-    httpServer.listen(80, () =>
-      console.log(`HTTP Server Running on Port: 80`));
-
-    httpsServer.listen(443, () => {
-      console.log(`HTTPS Server Running on Port: 443`);
-    });
+    httpServer.listen(PORT, () =>
+      console.log(`HTTP Server Running on Port: ${PORT}`));
   })
   .catch((error) => console.log(`${error} did not connect`));

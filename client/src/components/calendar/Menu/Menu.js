@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { List, ListItem, ListItemText } from "@mui/material";
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 
 export default function Menu() {
   const date = useSelector(state => state.date);
@@ -109,13 +110,14 @@ export default function Menu() {
           <Typography variant="h5" sx={{ marginLeft: 1, textAlign: "left", color: "black" }}>{getMonth(date.month - 1)} {day} </Typography>
           {
             monthTask.filter((t => t.date.day === day)).map((task, index) => (
-              <Box key={index} display="flex" flexDirection="row">
-                <Checkbox
+              <Box key={index} display="flex" flexDirection="row" alignItems={"center"}>
+                <CircleRoundedIcon fontSize="small"></CircleRoundedIcon>
+                {/* <Checkbox
                   checked={task.complete}
                   onChange={() => task.complete ?
                     dispatch(updateTask(task._id, { ...task, complete: false })) :
                     dispatch(updateTask(task._id, { ...task, complete: true }))}
-                />
+                /> */}
                 <Typography variant="h6" component="div" align="center" sx={{ m: 1, textAlign: "left", flexGrow: 1, color: "black" }}> {task.title}</Typography>
                 <IconButton size="large" edge="start" aria-label="menu" sx={{ mr: 1, color: "#5f6368" }} onClick={() => dispatch(deleteTask(task._id))}>
                   <DeleteIcon id={task._id} />
@@ -135,7 +137,7 @@ export default function Menu() {
     <Box gridColumn="span 3" sx={{ borderBottom: "#dadce0 1px solid" }}>
       {monthTask.length > 0 ? showAllTask() : (
         <Typography variant="h5" sx={{ marginLeft: 1, textAlign: "left", color: "black" }}>
-          No tasks this month
+          No events this month
         </Typography>
       )}
 
@@ -146,7 +148,7 @@ export default function Menu() {
           width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,
         }}>
           <Typography id="share-task-modal" variant="h6" component="h2">
-            Share Task
+            Share event
           </Typography>
           <List dense={true}>
             {currentTaskId ? tasks.find(task => task._id === currentTaskId)["sharedWith"].map((e) =>
