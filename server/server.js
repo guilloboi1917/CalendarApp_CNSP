@@ -28,9 +28,6 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
-app.use("/tasks", PostTaskRoutes);
-app.use("/users", UserRoute);
-
 app.get("/", (req, res) => {
   res.send("hello to crud calendar api")
 })
@@ -69,6 +66,10 @@ app.use(
       },
   }),
 );
+
+// Specify routes after middleware
+app.use("/tasks", PostTaskRoutes);
+app.use("/users", UserRoute);
 
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
